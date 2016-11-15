@@ -1,0 +1,10 @@
+#
+# Makefile.utils
+#
+# File used to store generic functions for Poly Build system.
+#
+
+include $(PROJECT_FOLDER)/utils/variables/Makefile.ui
+include $(PROJECT_FOLDER)/utils/variables/Makefile.build
+
+include $(PROJECT_FOLDER)/utils/functions/Makefile.ui

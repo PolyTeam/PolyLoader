@@ -1,0 +1,18 @@
+#
+# Makefile.build
+#
+# File used to store build variables for Poly Build system
+#
+
+
+CC = $(POLY_FOLDER)/PolyBuild/toolchain/bin/poly-gcc
+AS = $(POLY_FOLDER)/PolyBuild/toolchain/bin/poly-as
+LD = $(POLY_FOLDER)/PolyBuild/toolchain/bin/poly-ld
+
+BIN_DIR = $(PWD)/build
+OBJ_DIR = $(BIN_DIR)
+
+INCLUDE_DIR = -Iinclude
+
+OUTPUT_NAME_DEBUG = $(PROJECT_NAME)d-$($(PROJECT_NAME)_VERSION_MAJOR).$($(PROJECT_NAME)_VERSION_MINOR).$($(PROJECT_NAME)_VERSION_PATCH)
+OUTPUT_NAME_RELEASE = $(PROJECT_NAME)-$($(PROJECT_NAME)_VERSION_MAJOR).$($(PROJECT_NAME)_VERSION_MINOR).$($(PROJECT_NAME)_VERSION_PATCH)

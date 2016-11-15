@@ -1,0 +1,20 @@
+#
+# Makefile.ui
+#
+# File used to store ui variables for Poly Build system
+#
+
+
+#
+# Console attributes
+#
+RST_ATTR = "\e[0m"
+
+#
+# Colors
+#
+CLR_RED 	= "\e[31m"
+CLR_GREEN 	= "\e[32m"
+CLR_YELLOW	= "\e[33m"
+CLR_BLUE 	= "\e[34m"
+CLR_WHITE	= "\e[97m"

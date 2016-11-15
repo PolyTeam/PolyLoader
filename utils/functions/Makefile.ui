@@ -1,0 +1,22 @@
+#
+# Makefile.ui
+#
+# File used to store ui functions for Poly Build system.
+#
+
+
+define print_error
+	@echo -e $(CLR_RED)ERROR : $(1)$(RST_ATTR)
+endef
+
+define print_warning
+	@echo -e $(CLR_YELLOW)WARNING : $(1)$(RST_ATTR)
+endef
+
+define print_success
+	@echo -e $(CLR_GREEN)SUCCESS : $(1)$(RST_ATTR)
+endef
+
+define print_info
+	@echo -e $(CLR_WHITE)INFO : $(1)$(RST_ATTR)
+endef
