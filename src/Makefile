@@ -1,9 +1,7 @@
-SRCS = $(wildcard *.c)
-OBJS = $(patsubst %.c, $(OBJ_DIR)/%$(BUILD_SUFFIX).o, $(SRCS))
+SRCS = $(wildcard *.S)
+OBJS = $(patsubst %.S, $(OBJ_DIR)/%$(BUILD_SUFFIX).o, $(SRCS))
 
 all: $(OBJS)
-	# Add $(MAKE) -C <subfolder>
-	# For each subfolder
 
-$(OBJ_DIR)/%$(BUILD_SUFFIX).o: %.c
-	$(CC) $(C_FLAGS) -c $^ -o $@ $(INCLUDE_DIR)
+$(OBJ_DIR)/%$(BUILD_SUFFIX).o: %.S
+	$(AS) $(INCLUDE_DIR) -o $@ $^ 

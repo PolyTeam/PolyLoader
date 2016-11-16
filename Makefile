@@ -11,9 +11,11 @@ $(PROJECT_NAME)_VERSION_MAJOR = 0
 $(PROJECT_NAME)_VERSION_MINOR = 0
 $(PROJECT_NAME)_VERSION_PATCH = 0
 
-C_FLAGS_COMMON = -Wall -Wextra -Wpedantic
-C_FLAGS_DEBUG = $(C_FLAGS_COMMON) -g
+C_FLAGS_COMMON = 
+C_FLAGS_DEBUG = $(C_FLAGS_COMMON) --gstabs
 C_FLAGS_RELEASE = $(C_FLAGS_COMMON) -O3
+
+LD_FLAGS = --oformat binary -Ttext 0x7c00
 
 include utils/Makefile.utils
 include utils/Makefile.custom
@@ -41,14 +43,18 @@ $(PROJECT_NAME)_debug: prepare
 	$(eval C_FLAGS = $(C_FLAGS_DEBUG))
 	$(eval BUILD_SUFFIX = _d)
 	$(MAKE) -C src
-	$(LD) -o $(BIN_DIR)/$(OUTPUT_NAME_DEBUG) $(OBJ_DIR)/*_d.o
+	$(LD) $(LD_FLAGS) -o $(BIN_DIR)/$(OUTPUT_NAME_DEBUG) $(OBJ_DIR)/*_d.o
 		
 
 $(PROJECT_NAME)_release: prepare
 	$(call print_info,"Building $(PROJECT_NAME) Release...")
 	$(eval C_FLAGS = $(C_FLAGS_RELEASE))
 	$(MAKE) -C src
-	$(LD) -o $(BIN_DIR)/$(OUTPUT_NAME_RELEASE) $(OBJ_DIR)/*[^_d].o
+	$(LD) $(LD_FLAGS) -o $(BIN_DIR)/$(OUTPUT_NAME_RELEASE) $(OBJ_DIR)/*[^_d].o
+
+test: $(PROJECT_NAME)_debug
+	cat $(BIN_DIR)/$(OUTPUT_NAME_DEBUG) /dev/zero | dd of=$(BIN_DIR)/floppy_d bs=512 count=2880
+	qemu-system-x86_64 -boot a -fda $(BIN_DIR)/floppy_d
 
 #
 # Tools targets
