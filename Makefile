@@ -15,7 +15,9 @@ C_FLAGS_COMMON =
 C_FLAGS_DEBUG = $(C_FLAGS_COMMON) --gstabs
 C_FLAGS_RELEASE = $(C_FLAGS_COMMON) -O3
 
-LD_FLAGS = --oformat binary -Ttext 0x7c00
+AS_FLAGS = --32
+
+LD_FLAGS = -m elf_i386 -Ttext 0 --oformat binary
 
 include utils/Makefile.utils
 include utils/Makefile.custom
@@ -43,18 +45,17 @@ $(PROJECT_NAME)_debug: prepare
 	$(eval C_FLAGS = $(C_FLAGS_DEBUG))
 	$(eval BUILD_SUFFIX = _d)
 	$(MAKE) -C src
-	$(LD) $(LD_FLAGS) -o $(BIN_DIR)/$(OUTPUT_NAME_DEBUG) $(OBJ_DIR)/*_d.o
 		
 
 $(PROJECT_NAME)_release: prepare
 	$(call print_info,"Building $(PROJECT_NAME) Release...")
 	$(eval C_FLAGS = $(C_FLAGS_RELEASE))
 	$(MAKE) -C src
-	$(LD) $(LD_FLAGS) -o $(BIN_DIR)/$(OUTPUT_NAME_RELEASE) $(OBJ_DIR)/*[^_d].o
 
 test: $(PROJECT_NAME)_debug
-	cat $(BIN_DIR)/$(OUTPUT_NAME_DEBUG) /dev/zero | dd of=$(BIN_DIR)/floppy_d bs=512 count=2880
-	qemu-system-x86_64 -boot a -fda $(BIN_DIR)/floppy_d
+	$(call print_success,"Creating the bootable floppy...")
+	cat $(BIN_DIR)/loader$(BUILD_SUFFIX).bin $(BIN_DIR)/kernel$(BUILD_SUFFIX).bin /dev/zero | dd of=$(BIN_DIR)/floppy_d bs=512 count=2880
+	qemu-system-i386 -boot a -fda $(BIN_DIR)/floppy_d
 
 #
 # Tools targets

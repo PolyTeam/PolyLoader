@@ -1,7 +1,12 @@
 SRCS = $(wildcard *.S)
 OBJS = $(patsubst %.S, $(OBJ_DIR)/%$(BUILD_SUFFIX).o, $(SRCS))
+BINS = $(patsubst %.S, $(BIN_DIR)/%$(BUILD_SUFFIX).bin, $(SRCS))
 
-all: $(OBJS)
+all: $(BINS)
+
+$(BIN_DIR)/%$(BUILD_SUFFIX).bin: $(OBJ_DIR)/%$(BUILD_SUFFIX).o
+	$(LD) $(LD_FLAGS) -o $@ $^
 
 $(OBJ_DIR)/%$(BUILD_SUFFIX).o: %.S
-	$(AS) $(INCLUDE_DIR) -o $@ $^ 
+	$(AS) $(AS_FLAGS) $(INCLUDE_DIR) -o $@ $^
+	

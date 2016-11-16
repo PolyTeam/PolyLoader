@@ -1,18 +1,15 @@
-.code16
-
-.func writeString
-	writeString:
-		lodsb			# Load ds:si byte into al
-		or	%al, %al	# Test if char is 0
-		jz	writeString_end
-		
-		mov	$0xe, %ah
-		mov	$9, %bx
-		int 	$0x10
-		
-		jmp writeString
-
-	writeString_end:
-		retw
-.endfunc
-
+print_msg:
+	push	%ax
+	push 	%bx
+print_msg_start:
+	lodsb
+	cmp	$0, %al
+	jz	print_msg_end
+	mov	$0x0e, %ah
+	mov	$0x07, %bx
+	int	$0x10
+	jmp 	print_msg_start
+print_msg_end:
+	pop 	%bx
+	pop	%ax
+	ret
