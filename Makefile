@@ -54,7 +54,7 @@ $(PROJECT_NAME)_release: prepare
 
 test: $(PROJECT_NAME)_debug
 	$(call print_success,"Creating the bootable floppy...")
-	cat $(BIN_DIR)/loader$(BUILD_SUFFIX).bin $(BIN_DIR)/kernel$(BUILD_SUFFIX).bin /dev/zero | dd of=$(BIN_DIR)/floppy_d bs=512 count=2880
+	cat $(BIN_DIR)/loader$(BUILD_SUFFIX).bin $(BIN_DIR)/loader2$(BUILD_SUFFIX).bin $(BIN_DIR)/kernel$(BUILD_SUFFIX).bin /dev/zero | dd of=$(BIN_DIR)/floppy_d bs=512 count=2880
 	qemu-system-i386 -boot a -fda $(BIN_DIR)/floppy_d
 
 #
