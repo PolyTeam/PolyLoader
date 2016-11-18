@@ -14,16 +14,17 @@
 
 	jmp	_start
 
+.include "memory.S"
 .include "utils.S"
 
 _start:
 	/* Initializing segments */
-	mov 	$0x07c0, %ax
+	mov 	$stage1_bootoff, %ax
 	mov	%ax, %ds
 	mov 	%ax, %es
-	mov 	$0x8000, %ax
+	mov 	$stage1_stackseg, %ax
 	mov	%ax, %ss
-	mov	$0xf000, %sp
+	mov	$stage1_stackp, %sp
 
 	/* Backing up device number this block was loaded from */
 	mov	%dl, (bootdisk)	
@@ -34,14 +35,14 @@ _start:
 	xor 	%ax, %ax
 	int	$0x13
 	
-	/* Copy kernel from the disk to the memory */
+	/* Copy stage 2 from the disk to the memory */
 	mov	$(loading_msg), %si
 	call	print_msg
 	
 	push 	%es
-	mov	$0x0100, %ax
+	mov	$stage2_bootseg, %ax
 	mov	%ax, %es
-	mov	$0, %bx
+	mov	$stage2_bootoff, %bx
 
 	mov 	$2, %ah
 	mov	$1, %al
@@ -56,7 +57,7 @@ _start:
 	call	print_msg
 
 	/* Finish, we can jump to the kernel code */
-	ljmp	$0x0100, $0x0000
+	ljmp	$stage2_bootseg, $stage2_bootoff
 
 end:
 	jmp 	end
@@ -64,9 +65,9 @@ end:
 reset_msg:
 	.asciz "Reseting disks...\r\n"
 loading_msg:
-	.asciz "Loading kernel...\r\n"
+	.asciz "Loading stage 2...\r\n"
 loaded_msg:
-	.asciz "Kernel loaded, jumping...\r\n"
+	.asciz "Stage 2 loaded, jumping...\r\n"
 bootdisk:
 	.byte 0
 
