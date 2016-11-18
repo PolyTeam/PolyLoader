@@ -10,18 +10,13 @@
 
 	jmp 	_start
 
+.include "memory.S"
 .include "utils.S"
 
 _start:
-	/* Initializing segments and stack */
-	mov 	$0x0100, %ax
-	mov	%ax, %ds
-	mov 	%ax, %es
-	mov 	$0x8000, %ax
-	mov	%ax, %ss
-	mov	$0xf000, %sp
-
-	/* Show a simple victory message */
+	/*
+	 * Here we do kernel stuff, like pushing victory message and shits
+	 */
 	mov	$(victory_msg), %si
 	call	print_msg
 
@@ -31,3 +26,6 @@ end:
 victory_msg:
 	.asciz "Here is kernel speaking...\r\n"
 
+.org 511
+padding:
+	.byte 0x00
