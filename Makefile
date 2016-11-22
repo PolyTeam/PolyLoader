@@ -15,7 +15,7 @@ C_FLAGS_COMMON =
 C_FLAGS_DEBUG = $(C_FLAGS_COMMON) --gstabs
 C_FLAGS_RELEASE = $(C_FLAGS_COMMON) -O3
 
-AS_FLAGS = --32
+AS_FLAGS = --32 -gstabs
 
 LD_FLAGS = -m elf_i386 -Ttext 0 --oformat binary
 
