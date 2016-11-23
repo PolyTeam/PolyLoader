@@ -5,9 +5,10 @@
 #
 
 
-CC = $(POLY_FOLDER)/PolyBuild/toolchain/bin/poly-gcc
-AS = $(POLY_FOLDER)/PolyBuild/toolchain/bin/poly-as
-LD = $(POLY_FOLDER)/PolyBuild/toolchain/bin/poly-ld
+CC 	= $(POLY_FOLDER)/PolyBuild/toolchain/bin/poly-gcc
+AS 	= $(POLY_FOLDER)/PolyBuild/toolchain/bin/poly-as
+LD 	= $(POLY_FOLDER)/PolyBuild/toolchain/bin/poly-ld
+BOCHS 	= $(POLY_FOLDER)/PolyBuild/toolchain/bin/bochs
 
 BIN_DIR = $(PWD)/build
 OBJ_DIR = $(BIN_DIR)
