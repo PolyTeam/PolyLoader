@@ -1,15 +1,22 @@
+/*
+ * print_msg : print a given message to the screen on the current cursor
+ *	position. 
+ *	params : %si : memory location of the first character to write
+ */
 print_msg:
-	push	%ax
-	push 	%bx
+	pushw	%ax
+	pushw 	%bx
 print_msg_start:
 	lodsb
-	cmp	$0, %al
+	cmpb	$0, %al
 	jz	print_msg_end
-	mov	$0x0e, %ah
-	mov	$0x07, %bx
+	movb	$0x0e, %ah
+	movw	$0x07, %bx
 	int	$0x10
 	jmp 	print_msg_start
 print_msg_end:
-	pop 	%bx
-	pop	%ax
+	popw 	%bx
+	popw	%ax
+	ret
+
 	ret
