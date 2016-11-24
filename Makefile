@@ -52,11 +52,17 @@ $(PROJECT_NAME)_release: prepare
 	$(eval C_FLAGS = $(C_FLAGS_RELEASE))
 	$(MAKE) -C src
 
-test: $(PROJECT_NAME)_debug
+prepare_test: $(PROJECT_NAME)_debug
 	$(call print_success,"Creating the bootable floppy...")
 	cat $(BIN_DIR)/loader$(BUILD_SUFFIX).bin $(BIN_DIR)/loader2$(BUILD_SUFFIX).bin /dev/zero | dd of=$(BIN_DIR)/floppy_d bs=512 count=2880
+
+test: test_qemu
+
+test_bochs: prepare_test
 	$(BOCHS) -f utils/bochsrc.txt -q
-	#qemu-system-i386 -boot a -fda $(BIN_DIR)/floppy_d -m 4G -S -s -monitor stdio -d int,cpu_reset -no-reboot
+
+test_qemu: prepare_test
+	qemu-system-i386 -boot a -fda $(BIN_DIR)/floppy_d -m 4G -monitor stdio
 
 #
 # Tools targets
