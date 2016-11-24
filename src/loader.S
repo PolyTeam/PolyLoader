@@ -7,6 +7,9 @@
 # * %dl		: will store the device number this block was loaded from
 # * %es:%si	: will store the partition table entry we were loaded from
 #
+# .org 0x0 is used, so the memory locations in the released binary are starting
+# from 0x0. To access to the corresponding physical address, use 0x7c00 + offset
+
 
 .code16
 .org 0x0

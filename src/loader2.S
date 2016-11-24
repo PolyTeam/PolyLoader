@@ -3,6 +3,10 @@
 #
 # Simple bootloader use to start the PolyHeart kernel.
 #
+# This second stage should enabled protected mode (%cr0 & $0x1), then copy the
+# kernel to a fixed memory location through unreal mode. Finally, we can jump
+# to the kernel code.
+#
 
 .code16
 .org 0x0
