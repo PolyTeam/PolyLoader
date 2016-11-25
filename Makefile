@@ -52,9 +52,13 @@ $(PROJECT_NAME)_release: prepare
 	$(eval C_FLAGS = $(C_FLAGS_RELEASE))
 	$(MAKE) -C src
 
-prepare_test: $(PROJECT_NAME)_debug
+prepare_test: $(PROJECT_NAME)_debug kernel_debug
 	$(call print_success,"Creating the bootable floppy...")
-	cat $(BIN_DIR)/loader$(BUILD_SUFFIX).bin $(BIN_DIR)/loader2$(BUILD_SUFFIX).bin /dev/zero | dd of=$(BIN_DIR)/floppy_d bs=512 count=2880
+	cat $(BIN_DIR)/loader$(BUILD_SUFFIX).bin $(BIN_DIR)/loader2$(BUILD_SUFFIX).bin $(BIN_DIR)/kernel$(BUILD_SUFFIX).bin /dev/zero | dd of=$(BIN_DIR)/floppy_d bs=512 count=2880
+
+kernel_debug:
+	$(CC) -W -Wall -Wextra -pedantic -m32 -g -c -o $(OBJ_DIR)/kernel_d.o utils/kernel.c
+	$(LD) -m elf_i386 -Ttext 0 --oformat binary $(OBJ_DIR)/kernel_d.o -o $(BIN_DIR)/kernel_d.bin
 
 test: test_qemu
 
