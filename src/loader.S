@@ -20,59 +20,68 @@
 .include "memory.S"
 .include "utils.S"
 
+#
+# Strings and data
+#
+dev_nb_msg:
+	.asciz	"STAGE 1 : Get boot device number...\r\n"
+rst_disk_msg:
+	.asciz	"STAGE 1 : Reset disks...\r\n"
+load_stage2_msg:
+	.asciz	"STAGE 1 : Loading Stage 2...\r\n"
+jmp_stage2_msg:
+	.asciz	"STAGE 1 : Jumping to Stage 2...\r\n"
+bootdisk:
+	.byte 	0
+
+#
+# Stage 1 bootloader
+#
 _start:
 	/* Initializing segments */
-	mov 	$stage1_bootoff, %ax
-	mov	%ax, %ds
-	mov 	%ax, %es
-	mov 	$stage1_stackseg, %ax
-	mov	%ax, %ss
-	mov	$stage1_stackp, %sp
+	movw 	$STAGE1_BOOTSEG, %ax
+	movw	%ax, %ds
+	movw 	%ax, %es
+	movw 	$STAGE1_STACKSEG, %ax
+	movw	%ax, %ss
+	movw	$STAGE1_STACKP, %sp
 
 	/* Backing up device number this block was loaded from */
-	mov	%dl, (bootdisk)	
+	movw	$dev_nb_msg, %si
+	call	print_msg
+	movb	%dl, bootdisk	
 
 	/* Reset disk */
-	mov 	$(reset_msg), %si
-	call 	print_msg
-	xor 	%ax, %ax
+	movw	$rst_disk_msg, %si
+	call	print_msg	
+	xorw 	%ax, %ax
 	int	$0x13
+
+	/* Reset screen */
+	call 	reset_screen
 	
 	/* Copy stage 2 from the disk to the memory */
-	mov	$(loading_msg), %si
+	movw	$load_stage2_msg, %si
 	call	print_msg
 	
-	push 	%es
-	mov	$stage2_bootseg, %ax
-	mov	%ax, %es
-	mov	$stage2_bootoff, %bx
+	pushw 	%es
+	movw	$STAGE2_BOOTSEG, %ax	# Destination segment
+	movw	%ax, %es
+	movw	$STAGE2_BOOTOFF, %bx 	# Destination offset
 
-	mov 	$2, %ah
-	mov	$1, %al
-	mov	$0, %ch
-	mov 	$2, %cl
-	mov	$0, %dh
-	mov	(bootdisk), %dl
+	movb 	$0x2, %ah
+	movb	$0x1, %al		# Total of sectors to read
+	movb	$0x0, %ch		# Cylinder
+	movb 	$0x2, %cl		# Sector
+	movb	$0x0, %dh		# Head
+	movb	bootdisk, %dl		# Drive
 	int	$0x13
-	pop 	%es
+	popw 	%es
 
-	mov	$(loaded_msg), %si
+	movw	$jmp_stage2_msg, %si
 	call	print_msg
+	ljmp	$STAGE2_BOOTSEG, $STAGE2_BOOTOFF
 
-	/* Finish, we can jump to the kernel code */
-	ljmp	$stage2_bootseg, $stage2_bootoff
-
-end:
-	jmp 	end
-
-reset_msg:
-	.asciz "Reseting disks...\r\n"
-loading_msg:
-	.asciz "Loading stage 2...\r\n"
-loaded_msg:
-	.asciz "Stage 2 loaded, jumping...\r\n"
-bootdisk:
-	.byte 0
 
 .org 510
 magic:
