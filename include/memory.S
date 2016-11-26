@@ -20,29 +20,29 @@ Memory map (physical addresses)
 #
 # Stage 1 bootloader
 #
-.equ stage1_bootseg, 	0x0000
-.equ stage1_bootoff, 	0x07c0
+.equ STAGE1_BOOTSEG, 	0x07c0
+.equ STAGE1_BOOTOFF, 	0x0000
 
-.equ stage1_stackseg, 	0x0000
-.equ stage1_stackoff,	0x07e0
-.equ stage1_stackp,	0xf7e0
+.equ STAGE1_STACKSEG, 	0x07e0
+.equ STAGE1_STACKOFF,	0x0000
+.equ STAGE1_STACKP,	0x0400
 
 #
 # Stage 2 bootloader
 #
-.equ stage2_bootseg,	0x1100
-.equ stage2_bootoff, 	0x0000
+.equ STAGE2_BOOTSEG,	0x0820
+.equ STAGE2_BOOTOFF, 	0x0000
 
-.equ stage2_stackseg,	0x1000
-.equ stage2_stackoff,	0x0000
-.equ stage2_stackp,	0x1000
+.equ STAGE2_STACKSEG,	0x0860
+.equ STAGE2_STACKOFF,	0x0000
+.equ STAGE2_STACKP,	0x0400
 
 #
 # Kernel
 #
-.equ kernel_bootseg,	0x7100
-.equ kernel_bootoff,	0x0000
+.equ KERNEL_BOOTSEG,	0x0010
+.equ KERNEL_BOOTOFF,	0x0000
 
-.equ kernel_stackseg,	0x7000
-.equ kernel_stackoff,	0x0000
-.equ kernel_stackp,	0x1000
+.equ KERNEL_STACKSEG,	0x0008
+.equ KERNEL_STACKOFF,	0x0000
+.equ KERNEL_STACKP,	0x00100000
